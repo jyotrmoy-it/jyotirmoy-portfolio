@@ -18,6 +18,21 @@
 <section class="page-hero"><div class="container"><p class="eyebrow">Knowledge Hub / PowerShell &amp; automation / Article #1</p><h1>What happens when you run a <span>PowerShell command?</span></h1><p class="lead">Ever wondered what actually happens behind the scenes when you type a simple command like <code>Get-Process</code>? Let's break it down into five simple steps.</p></div></section>
 <article class="section"><div class="container article-content">
 <p>When you enter a command in PowerShell, several things happen before the results appear in your terminal.</p>
+<div class="ps-flow-visual" role="img" aria-label="Animated illustration showing a PowerShell command moving through parsing, execution, object collection and terminal output">
+  <div class="ps-flow-terminal">
+    <div class="ps-terminal-top"><span></span><span></span><span></span><b>POWERSHELL</b></div>
+    <div class="ps-terminal-line"><i>PS</i> &gt; Get-Process<span class="ps-cursor"></span></div>
+    <div class="ps-terminal-output">Process objects returned...</div>
+  </div>
+  <div class="ps-flow-track" aria-hidden="true"><span class="ps-flow-packet"></span></div>
+  <div class="ps-flow-stages">
+    <div class="ps-flow-stage"><span class="ps-stage-icon">⌘</span><b>Parse</b><small>Understand command</small></div>
+    <div class="ps-flow-stage"><span class="ps-stage-icon">⚙</span><b>Execute</b><small>Run the cmdlet</small></div>
+    <div class="ps-flow-stage"><span class="ps-stage-icon">▤</span><b>Objects</b><small>Collect results</small></div>
+    <div class="ps-flow-stage"><span class="ps-stage-icon">▣</span><b>Display</b><small>Format output</small></div>
+  </div>
+  <p class="ps-flow-caption">COMMAND → PIPELINE → OBJECTS → OUTPUT</p>
+</div>
 <ol class="article-steps">
 <li><h2>You enter a command</h2><p>You type a PowerShell command, for example:</p><pre><code>Get-Process</code></pre></li>
 <li><h2>PowerShell parses it</h2><p>PowerShell identifies the command, its parameters and the required inputs. It interprets the command so it can determine what needs to run.</p></li>
