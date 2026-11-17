@@ -89,3 +89,27 @@ h1{font-size:clamp(2.6rem,6.5vw,5.2rem);line-height:1.08;letter-spacing:-2.6px;m
 @keyframes case-glow{0%,100%{transform:translateY(0);box-shadow:0 0 8px rgba(34,211,238,.04)}50%{transform:translateY(-5px);box-shadow:0 0 24px rgba(34,211,238,.16)}}@keyframes case-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}@keyframes case-signal{to{transform:translateX(100%)}}
 @media(max-width:700px){.case-grid{grid-template-columns:1fr}.case-section-head{align-items:flex-start;flex-direction:column;gap:8px}.case-visual{gap:8px;min-height:165px}.case-node{min-width:0;padding:12px 8px}.case-node b{font-size:.76rem}.case-node small{font-size:.58rem}.case-visual>i{width:15px}.case-visual-access{flex-direction:column;gap:14px}.access-flow{gap:6px;font-size:.6rem}.access-flow i{width:18px}}
 @media(prefers-reduced-motion:reduce){.case-node,.access-shield,.access-flow i:after{animation:none!important}}
+
+/* PowerShell disk-space monitoring: animated server visual */
+.disk-visual{position:relative;display:flex;align-items:center;justify-content:center;gap:clamp(20px,5vw,58px);min-height:250px;padding:30px;margin:0 0 34px;overflow:hidden;background:radial-gradient(ellipse at 35% 50%,rgba(34,211,238,.13),transparent 55%),#0b1422;border:1px solid var(--border);border-radius:16px}
+.disk-rack{display:flex;gap:12px;z-index:1;perspective:700px}
+.disk-server{position:relative;width:88px;height:158px;padding:27px 10px 12px;display:flex;flex-direction:column;gap:9px;background:linear-gradient(145deg,#1a3554,#0c192a);border:1px solid #3b638b;border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.3);animation:disk-server-float 4s ease-in-out infinite}
+.disk-server:nth-child(2){animation-delay:.45s}.disk-server:nth-child(3){animation-delay:.9s}
+.disk-server-label{position:absolute;top:8px;left:8px;right:8px;overflow:hidden;color:#a8c9eb;font:600 .48rem Consolas,monospace;white-space:nowrap;text-align:center}
+.disk-server>i{height:8px;border-radius:3px;background:linear-gradient(90deg,#1e4b6d,#18314c);border:1px solid #315879;position:relative}
+.disk-server>i:after{content:"";position:absolute;right:5px;top:2px;width:4px;height:4px;border-radius:50%;background:#34d399;box-shadow:0 0 7px #34d399;animation:disk-led 1.5s infinite}
+.disk-meter{height:8px;margin-top:3px;overflow:hidden;border-radius:8px;background:#26384d}
+.disk-meter b{display:block;width:68%;height:100%;border-radius:8px;background:linear-gradient(90deg,#2563eb,#22d3ee);animation:disk-capacity 3s ease-in-out infinite alternate}
+.disk-meter-warn b{width:91%;background:linear-gradient(90deg,#d97706,#fb7185)}
+.disk-readout{z-index:1;display:flex;flex-direction:column;gap:7px;min-width:175px}
+.disk-readout>b{font-size:.95rem;letter-spacing:1px}.disk-readout>strong{color:var(--cyan);font:700 .68rem Consolas,monospace;letter-spacing:1.4px}.disk-readout>small{color:var(--muted);font: .58rem Consolas,monospace;letter-spacing:1px}
+.disk-live-dot{width:9px;height:9px;border-radius:50%;background:#34d399;box-shadow:0 0 0 0 rgba(52,211,153,.5);animation:disk-live-pulse 1.8s infinite}
+.disk-scanline{position:absolute;z-index:2;left:0;right:0;top:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(34,211,238,.8),transparent);box-shadow:0 0 12px rgba(34,211,238,.7);animation:disk-scan 4.5s linear infinite;pointer-events:none}
+.disk-visual-caption{position:absolute;right:16px;bottom:12px;color:var(--muted);font: .6rem Consolas,monospace;letter-spacing:1.2px}
+@keyframes disk-server-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes disk-led{0%,100%{opacity:.45}50%{opacity:1}}
+@keyframes disk-capacity{from{filter:brightness(.8)}to{filter:brightness(1.25)}}
+@keyframes disk-live-pulse{70%{box-shadow:0 0 0 10px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+@keyframes disk-scan{0%{top:8%;opacity:0}12%{opacity:1}88%{opacity:1}100%{top:92%;opacity:0}}
+@media(max-width:600px){.disk-visual{flex-direction:column;gap:20px;padding:24px 14px 38px}.disk-rack{gap:7px}.disk-server{width:72px;height:135px;padding-inline:7px}.disk-readout{align-items:center;text-align:center}.disk-visual-caption{font-size:.52rem}}
+@media(prefers-reduced-motion:reduce){.disk-server,.disk-server>i:after,.disk-meter b,.disk-live-dot,.disk-scanline{animation:none!important}}
