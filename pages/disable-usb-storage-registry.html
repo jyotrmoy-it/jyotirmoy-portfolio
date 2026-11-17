@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080d18">
+  <meta name="description" content="Learn how to restrict USB mass-storage devices on Windows by changing the USBSTOR registry setting, and how to restore access safely.">
+  <meta name="author" content="Jyotirmoy Mukherjee">
+  <link rel="canonical" href="https://bytebyjm.vercel.app/pages/disable-usb-storage-registry.html">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/style.css">
+  <title>Disable USB Storage Through the Windows Registry | Byte By Jyotirmoy</title>
+  <script src="../js/main.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container nav-wrap"><a class="brand" href="../index.html">Byte By <span>Jyotirmoy</span><b>.</b></a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu <span aria-hidden="true">☰</span></button><nav id="primary-nav" class="primary-nav" aria-label="Main navigation"><a href="../index.html">Home</a><a href="about.html">About</a><a href="expertise.html">Expertise</a><a href="experience.html">Experience</a><a href="projects.html">Projects</a><a href="knowledge.html" aria-current="page">Knowledge Hub</a><a href="contact.html">Contact</a></nav></div></header>
+<main>
+<section class="page-hero"><div class="container"><p class="eyebrow">Knowledge Hub / Tips &amp; Tricks / Article #1</p><h1>Disable USB <span>Storage Devices</span> Through the Registry</h1><p class="lead">A quick Windows registry setting can prevent standard USB mass-storage devices, such as flash drives, from being used on a PC.</p></div></section>
+<article class="section"><div class="container article-content">
+<div class="usb-visual" role="img" aria-label="Animated illustration showing a USB storage device being blocked by a Windows registry setting"><div class="usb-visual-orbit"></div><div class="usb-drive"><span class="usb-prongs"></span><span class="usb-body"></span><span class="usb-cap"></span></div><div class="usb-visual-status"><span class="usb-status-dot"></span><strong>USB STORAGE</strong><span>ACCESS RESTRICTED</span></div><div class="usb-registry-label">USBSTOR <b>Start = 4</b></div></div>
+<p>Want to restrict users from copying data to or from USB flash drives? You can disable the Windows USB mass-storage driver by changing a registry value. This can help reduce unauthorised data transfers and limit one possible route for introducing malware through removable storage.</p>
+<div class="callout"><strong>Important: this does not disable every USB port.</strong><p>This setting targets USB mass-storage devices, such as USB flash drives and many external USB drives. USB keyboards, mice and other USB device types may continue to work. It is not a complete data-loss-prevention or malware-protection solution.</p></div>
+<h2>Before you begin</h2>
+<ul>
+<li>Sign in with an account that has local administrator permissions.</li>
+<li>Back up the relevant registry key before making changes. In Registry Editor, right-click the <code>USBSTOR</code> key and select <strong>Export</strong>.</li>
+<li>On a company-managed computer, check with your IT or security team first. Group Policy or device-management policies may control or overwrite this setting.</li>
+</ul>
+<h2>How to disable USB storage</h2>
+<ol class="article-steps">
+<li><h2>Open the Run dialog</h2><p>Click <strong>Start</strong>, search for <strong>Run</strong>, or press <kbd>Windows + R</kbd>.</p></li>
+<li><h2>Launch Registry Editor</h2><p>Type <code>regedit</code> and press <strong>Enter</strong>. Approve the User Account Control prompt if it appears.</p></li>
+<li><h2>Navigate to the USB storage registry key</h2><p>In Registry Editor, browse to the following location:</p><pre><code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR</code></pre></li>
+<li><h2>Find the Start value</h2><p>In the right-hand pane, double-click the <code>Start</code> DWORD (32-bit) value.</p></li>
+<li><h2>Disable the USB storage driver</h2><p>In <strong>Value data</strong>, enter <code>4</code>. Leave the base as <strong>Hexadecimal</strong> unless your environment specifies otherwise, then select <strong>OK</strong>.</p><pre><code>Start = 4</code></pre></li>
+<li><h2>Close Registry Editor and restart Windows</h2><p>Close Registry Editor and restart the computer so the change can take effect. Test with an approved USB storage device.</p></li>
+</ol>
+<h2>How to re-enable USB storage</h2>
+<p>To restore the usual USB mass-storage driver setting, return to the same registry location:</p>
+<pre><code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR</code></pre>
+<p>Double-click <code>Start</code>, change <strong>Value data</strong> to <code>3</code>, select <strong>OK</strong>, and restart Windows.</p>
+<div class="registry-values"><div><span>4</span><strong>USB storage disabled</strong><small>USB mass-storage driver is prevented from starting.</small></div><div><span>3</span><strong>USB storage enabled</strong><small>Typical default start setting for USB mass storage.</small></div></div>
+<h2>Compatibility and security notes</h2>
+<ul>
+<li>This method is documented by Microsoft for managing USB storage on Windows. The exact behaviour can vary by Windows version, device state and organisation policy.</li>
+<li>Microsoft's current administrative guidance describes setting <code>USBSTOR\Start</code> to <code>4</code> and notes that a restart is required. The typical default value is <code>3</code>.</li>
+<li>This is not the same as disabling the physical USB controller or every USB port. Other device classes may remain available.</li>
+<li>For centrally managed business devices, use approved Group Policy, Microsoft Intune or your organisation's endpoint-security controls for broader and auditable removable-storage restrictions.</li>
+</ul>
+<div class="callout"><strong>Use this carefully</strong><p>Incorrect registry changes can cause system problems. Export the key first, make only the change described here, and keep a record of the original value so you can restore it if needed.</p></div>
+<p class="article-source">Reference: <a href="https://download.microsoft.com/download/56d34d76-4db1-48fd-b51e-1c8235736a4b/Administrative%20Guide.pdf" target="_blank" rel="noopener noreferrer">Microsoft — Administrative Guidance, Managing USB</a>.</p>
+<div class="article-discussion"><h2>Let's hear from the IT community</h2><p><strong>How does your organisation manage removable USB storage?</strong></p><ol><li>Registry configuration</li><li>Group Policy</li><li>Microsoft Intune or another endpoint-management platform</li><li>Still exploring the options</li></ol><p>Share your approach and lessons learned. Please avoid posting confidential company configurations.</p></div>
+<p class="article-tags">#Windows11 &nbsp; #Windows10 &nbsp; #WindowsRegistry &nbsp; #USBStorage &nbsp; #ITSecurity &nbsp; #SystemAdministration</p>
+<a class="text-link" href="knowledge.html">← Back to Knowledge Hub</a>
+</div></article>
+</main>
+<footer class="site-footer"><div class="container footer-inner"><p>© <span data-year></span> Jyotirmoy Mukherjee. Byte By Jyotirmoy. All rights reserved.</p><p>Built with HTML, CSS &amp; JavaScript | Hosted on Vercel</p></div></footer><a class="back-top" href="#top" aria-label="Back to top">↑</a>
+</body>
+</html>
