@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#080d18">
+<meta name="description" content="Start PowerShell automation with a read-only Windows disk-space report, remote server checks, CSV export and safe scheduling practices.">
+<meta name="author" content="Jyotirmoy Mukherjee"><link rel="canonical" href="https://bytebyjm.vercel.app/pages/powershell-disk-space-monitoring.html"><link rel="icon" href="../favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="../css/style.css">
+<title>PowerShell Disk Space Monitoring | Byte By Jyotirmoy</title><script src="../js/main.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container nav-wrap"><a class="brand" href="../index.html">Byte By <span>Jyotirmoy</span><b>.</b></a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu <span aria-hidden="true">☰</span></button><nav id="primary-nav" class="primary-nav" aria-label="Main navigation"><a href="../index.html">Home</a><a href="about.html">About</a><a href="expertise.html">Expertise</a><a href="experience.html">Experience</a><a href="projects.html">Projects</a><a href="knowledge.html" aria-current="page">Knowledge Hub</a><a href="contact.html">Contact</a></nav></div></header>
+<main>
+<section class="page-hero"><div class="container"><p class="eyebrow">KNOWLEDGE HUB / POWERSHELL &amp; AUTOMATION / ARTICLE #2</p><h1>Start automating with <span>disk space monitoring.</span></h1><p class="lead">A practical first PowerShell health check: inspect fixed disks, identify low free space, report across servers and build a repeatable routine.</p></div></section>
+<section class="section"><div class="container article-content">
+<div class="disk-visual" role="img" aria-label="Animated illustration of Windows server racks with disk capacity indicators and a monitoring scan line">
+  <div class="disk-scanline"></div><div class="disk-rack">
+    <div class="disk-server"><span class="disk-server-label">JM-TEST-GHOST</span><i></i><i></i><i></i><div class="disk-meter"><b></b></div></div>
+    <div class="disk-server"><span class="disk-server-label">SERVER / 02</span><i></i><i></i><i></i><div class="disk-meter disk-meter-warn"><b></b></div></div>
+    <div class="disk-server"><span class="disk-server-label">SERVER / 03</span><i></i><i></i><i></i><div class="disk-meter"><b></b></div></div>
+  </div>
+  <div class="disk-readout"><span class="disk-live-dot"></span><b>DISK HEALTH CHECK</b><strong>READ-ONLY SCAN</strong><small>FREE SPACE · CAPACITY · REPORT</small></div>
+  <span class="disk-visual-caption">POWERSHELL / STORAGE MONITOR</span>
+</div>
+<p>🚀 Want to start your PowerShell automation journey? Don't begin with a complicated script. Start with <strong>disk space monitoring</strong>.</p>
+<p>Imagine looking after 20, 50 or even 100 Windows servers. How would you know a volume is running low on free space before users start noticing a problem?</p>
+<p>You can build your first useful health check with a few lines of PowerShell. It is a simple, read-only starting point—not a replacement for an enterprise monitoring platform.</p>
+
+<h2>Your first PowerShell disk-space report</h2>
+<p>Run this locally in a PowerShell session to list fixed disks and show free and total capacity in GB:</p>
+<pre><code>Get-CimInstance Win32_LogicalDisk -Filter "DriveType=3" |
+Select-Object DeviceID,
+@{n='FreeGB';e={[math]::Round($_.FreeSpace/1GB,1)}},
+@{n='SizeGB';e={[math]::Round($_.Size/1GB,1)}}</code></pre>
+<p><strong>What does it do?</strong></p>
+<ul>
+<li><code>Get-CimInstance</code> reads disk information from the Windows logical disk class.</li>
+<li><code>DriveType=3</code> selects local fixed disks, excluding network and removable drives.</li>
+<li><code>FreeSpace</code> and <code>Size</code> are converted from bytes to GB and rounded to one decimal place.</li>
+<li><code>Select-Object</code> shapes the output into a compact report.</li>
+</ul>
+
+<h2>Take it one step further: add free-space percentage</h2>
+<p>A percentage makes it easier to compare volumes of different sizes and establish a threshold for investigation.</p>
+<pre><code>Get-CimInstance Win32_LogicalDisk -Filter "DriveType=3" |
+Select-Object DeviceID,
+@{n='FreeGB';e={[math]::Round($_.FreeSpace/1GB,1)}},
+@{n='SizeGB';e={[math]::Round($_.Size/1GB,1)}},
+@{n='FreePercent';e={
+    if ($_.Size -gt 0) {
+        [math]::Round(($_.FreeSpace / $_.Size) * 100,1)
+    } else { 0 }
+}}</code></pre>
+<p>For example, your team might choose to review a volume when free space falls below an agreed threshold such as 15%. The right threshold depends on workload, growth rate, capacity and operational policy—there is no universal number.</p>
+
+<h2>Monitor multiple Windows servers</h2>
+<p>Once the local report works, you can run the same read-only query remotely with <code>Invoke-Command</code>. Start with a small, approved test list:</p>
+<pre><code>$Servers = @('JM-TEST-GHOST')
+
+$DiskReport = Invoke-Command -ComputerName $Servers -ScriptBlock {
+    Get-CimInstance Win32_LogicalDisk -Filter "DriveType=3" |
+    Select-Object @{n='Server';e={$env:COMPUTERNAME}},
+        DeviceID,
+        @{n='FreeGB';e={[math]::Round($_.FreeSpace/1GB,1)}},
+        @{n='SizeGB';e={[math]::Round($_.Size/1GB,1)}},
+        @{n='FreePercent';e={
+            if ($_.Size -gt 0) {
+                [math]::Round(($_.FreeSpace / $_.Size) * 100,1)
+            } else { 0 }
+        }}
+}
+
+$DiskReport | Format-Table -AutoSize</code></pre>
+<div class="callout"><strong>Before running remotely:</strong><p>PowerShell remoting/WinRM must be configured and reachable, and your account needs the appropriate permissions on the target servers. Follow your organisation's approved access process. Test connectivity and error handling first; do not enable remoting broadly just to run an example.</p></div>
+
+<h2>Export the results to CSV</h2>
+<p>A CSV makes it easy to review results, filter low-capacity volumes and share a report with the authorised operations team.</p>
+<pre><code>$ReportPath = ".\DiskSpaceReport.csv"
+$DiskReport |
+Export-Csv -Path $ReportPath -NoTypeInformation -Encoding UTF8
+
+Write-Host "Disk report saved to $ReportPath"</code></pre>
+<p>For recurring reports, use a controlled output location with appropriate access permissions, retention and storage capacity. Avoid placing operational reports in a public folder.</p>
+
+<h2>Schedule a daily health check</h2>
+<ol>
+<li>Validate the script manually against a small test group.</li>
+<li>Add logging, timestamps, error handling and a clear exit/status result.</li>
+<li>Run it under an approved service identity or managed execution identity with least privilege; never embed a password in the script.</li>
+<li>Create a Windows Task Scheduler task using your organisation's standard deployment and change-control process.</li>
+<li>Review the output and failures regularly. A scheduled task that silently stops running is not reliable monitoring.</li>
+</ol>
+
+<h2>Three golden rules for trustworthy automation</h2>
+<ul>
+<li><strong>Read-only first.</strong> Collect and validate information before considering any action that changes a system.</li>
+<li><strong>Log every execution.</strong> Record when it ran, which targets were checked, what succeeded and what failed—without logging secrets.</li>
+<li><strong>Never hardcode credentials.</strong> Use approved credential-management or managed identity approaches and grant only the permissions required.</li>
+</ul>
+<p>The best automation engineers do more than write scripts. They build dependable workflows that save time, reduce repetitive manual work and help teams identify risks before they become incidents.</p>
+
+<div class="article-discussion"><h2>💬 Join the IT community discussion</h2><p><strong>What was the first PowerShell script you developed that your team actually started using in production?</strong></p><p>Share your experience in the comments. Let's learn from each other!</p><p>♻️ Follow for more practical PowerShell, Windows Server and IT Automation tips.</p></div>
+<p class="article-tags">#PowerShell #PowerShellAutomation #WindowsServer #ITOperations #SystemAdministrator #InfrastructureAutomation</p>
+<p class="article-source">Back to <a href="knowledge.html">Knowledge Hub</a> · <a href="powershell-command-execution.html">Read Article #1: What happens when you run a PowerShell command?</a></p>
+<div class="case-disclaimer"><b>Educational example</b><p>This article uses a generic test-server placeholder and demonstrates a read-only workflow. It does not describe a named employer, customer environment or verified production deployment. Adapt and validate scripts in an authorised test environment before operational use.</p></div>
+</div></section>
+</main>
+<footer class="site-footer"><div class="container footer-inner"><p>© <span data-year></span> Jyotirmoy Mukherjee. Byte By Jyotirmoy. All rights reserved.</p><p>Built with HTML, CSS &amp; JavaScript | Hosted on Vercel</p></div></footer><a class="back-top" href="#top" aria-label="Back to top">↑</a>
+</body></html>
