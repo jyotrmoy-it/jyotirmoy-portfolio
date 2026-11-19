@@ -138,3 +138,55 @@ h1{font-size:clamp(2.6rem,6.5vw,5.2rem);line-height:1.08;letter-spacing:-2.6px;m
 @keyframes ps-stage-glow{0%,100%{transform:translateY(0);border-color:#294766;box-shadow:none}45%{transform:translateY(-4px);border-color:#22d3ee;box-shadow:0 0 18px rgba(34,211,238,.12)}}
 @media(max-width:560px){.ps-flow-visual{padding:20px 12px 35px}.ps-flow-stages{gap:6px}.ps-flow-stage{padding:10px 3px}.ps-flow-stage small{font-size:.55rem}.ps-flow-caption{font-size:.48rem;right:9px}}
 @media(prefers-reduced-motion:reduce){.ps-cursor,.ps-terminal-output,.ps-flow-packet,.ps-flow-stage{animation:none!important}.ps-flow-packet{left:50%;opacity:1}}
+
+/* Experience page: recruiter-focused career timeline and animated operations visual */
+.experience-hero{background:radial-gradient(ellipse at 82% 24%,rgba(34,211,238,.15),transparent 38%),radial-gradient(ellipse at 10% 90%,rgba(37,99,235,.12),transparent 42%)}
+.experience-hero-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:25px}
+.experience-hero-tags span{padding:6px 12px;border:1px solid #29466b;border-radius:30px;background:rgba(20,34,56,.7);color:#b9d9fa;font-size:.76rem}
+.experience-impact-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.experience-impact{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:2px;padding:22px;background:linear-gradient(145deg,#121f32,#0e1827);border:1px solid var(--border);border-radius:13px}
+.experience-impact:after{content:"";position:absolute;right:-28px;top:-35px;width:95px;height:95px;border:1px solid rgba(34,211,238,.15);border-radius:50%;box-shadow:0 0 0 12px rgba(34,211,238,.025),0 0 0 25px rgba(34,211,238,.02)}
+.experience-impact strong{color:var(--cyan);font-size:clamp(1.65rem,3vw,2.25rem);line-height:1.2;letter-spacing:-1px}
+.experience-impact span{font-weight:750;font-size:.92rem}
+.experience-impact small{color:var(--muted);font-size:.72rem}
+.experience-automation-strip{display:flex;align-items:center;gap:18px;margin-top:16px;padding:20px 23px;background:#101c2d;border:1px solid var(--border);border-radius:13px}
+.experience-automation-icon{flex:0 0 48px;width:48px;height:48px;display:grid;place-items:center;border-radius:12px;background:#15314c;color:var(--cyan);font-size:1.5rem;animation:experience-gear 12s linear infinite}
+.experience-automation-strip>div:nth-child(2){flex:1}
+.experience-automation-strip strong{font-size:.94rem}
+.experience-automation-strip p{margin-top:3px;color:var(--muted);font-size:.83rem}
+.experience-automation-strip p b{color:var(--cyan)}
+.experience-automation-meter{flex:0 0 130px;height:8px;overflow:hidden;border-radius:20px;background:#26384d}
+.experience-automation-meter span{display:block;width:40%;height:100%;border-radius:20px;background:linear-gradient(90deg,#2563eb,#22d3ee);animation:experience-meter 3s ease-in-out infinite alternate}
+.experience-timeline{position:relative;max-width:980px;margin:0 auto;padding-left:35px}
+.experience-timeline:before{content:"";position:absolute;left:10px;top:10px;bottom:18px;width:2px;background:linear-gradient(#22d3ee,#2563eb 55%,#26384d)}
+.experience-role{position:relative;margin:0 0 24px}
+.experience-marker{position:absolute;left:-32px;top:29px;width:16px;height:16px;border:3px solid var(--cyan);border-radius:50%;background:var(--bg);box-shadow:0 0 0 5px rgba(34,211,238,.09)}
+.experience-current .experience-marker{background:var(--cyan);box-shadow:0 0 0 6px rgba(34,211,238,.12),0 0 18px rgba(34,211,238,.55)}
+.experience-role-card{padding:25px 27px;background:var(--surface);border:1px solid var(--border);border-radius:14px;transition:border-color .2s,transform .2s}
+.experience-role-card:hover{border-color:#3a668e;transform:translateY(-2px)}
+.experience-role-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.experience-role-card h3{font-size:1.35rem;line-height:1.3;margin:5px 0}
+.experience-company{color:#c5d7eb;font-size:.9rem;font-weight:700}
+.experience-company span{color:var(--cyan);padding:0 4px}
+.experience-current-label{padding:5px 10px;border:1px solid rgba(52,211,153,.35);border-radius:30px;background:rgba(52,211,153,.08);color:#6ee7b7;font-size:.68rem;font-weight:800;white-space:nowrap}
+.experience-role-summary{margin:17px 0;color:#c1ccdc;font-size:.91rem}
+.experience-responsibility-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:19px 25px;margin-top:21px;padding-top:20px;border-top:1px solid var(--border)}
+.experience-responsibility-grid h4{margin-bottom:8px;color:var(--cyan);font-size:.85rem}
+.experience-role-card ul{padding-left:1.1rem;color:#bac8da}
+.experience-role-card li{margin:0 0 8px;font-size:.81rem;line-height:1.6}
+.experience-highlight-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px;padding-top:17px;border-top:1px solid var(--border)}
+.experience-highlight-row span{padding:7px 11px;border-radius:7px;background:#142b46;color:#c8def6;font-size:.75rem}
+.experience-highlight-row b{color:var(--cyan)}
+.experience-leadership-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.experience-leadership-grid article{padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.experience-leadership-grid article>span{color:var(--cyan);font:700 .72rem Consolas,monospace}
+.experience-leadership-grid h3{margin:9px 0 6px;font-size:1rem}
+.experience-leadership-grid p{color:var(--muted);font-size:.8rem}
+.experience-cta{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:42px;padding:28px;background:linear-gradient(110deg,rgba(37,99,235,.13),rgba(34,211,238,.06));border:1px solid var(--border);border-radius:15px}
+.experience-cta h2{margin:6px 0;font-size:clamp(1.3rem,3vw,1.8rem)}
+.experience-cta p:last-child{color:var(--muted);font-size:.87rem}
+@keyframes experience-gear{to{transform:rotate(360deg)}}
+@keyframes experience-meter{from{filter:brightness(.8)}to{filter:brightness(1.35)}}
+@media(max-width:760px){.experience-impact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.experience-leadership-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.experience-cta{align-items:flex-start;flex-direction:column}}
+@media(max-width:560px){.experience-automation-strip{align-items:flex-start;flex-wrap:wrap}.experience-automation-meter{flex-basis:100%;margin-left:66px}.experience-timeline{padding-left:27px}.experience-timeline:before{left:7px}.experience-marker{left:-26px;width:14px;height:14px}.experience-role-card{padding:20px 17px}.experience-role-head{flex-direction:column;gap:8px}.experience-responsibility-grid{grid-template-columns:1fr;gap:15px}.experience-impact{padding:17px}.experience-highlight-row{flex-direction:column}.experience-leadership-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.experience-automation-icon,.experience-automation-meter span{animation:none!important}}
